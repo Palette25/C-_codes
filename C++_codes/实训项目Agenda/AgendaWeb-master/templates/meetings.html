@@ -1,0 +1,288 @@
+{% extends "layout.html" %}
+{% block head %}
+  <title>Meetings - Agenda</title>
+
+  <!-- Meeting info Modal -->
+
+  <div class="modal fade" id="meetingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel" id="modalMeetingTitle">Meeting: </h4>
+        </div>
+        <div class="modal-body">
+          <div class="piece">
+            <h4>Sponsor</h4>
+            <div>
+              <table class="table table-hover table-striped" id="sponsor_list">
+              
+              </table>
+            </div>
+            <hr>
+            <h4>Participators</h4>
+            <div>
+              <table class="table table-hover table-striped" id="participator_list">
+
+              </table>
+            </div>
+            <form class="form-signin" action="/dodeletemeeting" method="POST" id="deleteMeetingForm">
+              <hr>
+              <input class="form-control single" id="deleteTitle" name="title" readonly style="margin-bottom: 10px;">
+              <button class="btn btn-danger" id="deleteMeeting" type="submit" readonly><h4>Delete this meeting</h4></button>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Meeting Modal -->
+
+  <div class="modal fade" id="newMeetingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel" id="modalMeetingTitle">Meeting: </h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-signin" method="POST" action="/docreatemeeting">
+            <input type="text" class="form-control head" id="inputTitle" placeholder="Title" name="title">
+            <input type="datetime-local" class="form-control mid" id="inputStartDate" placeholder="Start Date" name="startDate">
+            <input type="datetime-local" class="form-control tail" id="inputEndDate" placeholder="End Date" name="endDate" style="margin-bottom: 10px;">
+
+            <h3 id="addParticipator"><span class="
+glyphicon glyphicon-plus-sign"></span> Add Participator</h3>
+            <div id="participators_list">
+
+            </div>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit" style="margin-top: 10px;"><span class="glyphicon glyphicon-ok"></span> Done</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block container %}
+  <div class="row">
+  
+    <!-- Left Part -->
+
+    <div class="col-xs-4">
+
+      <div class="bg-info piece" style="padding: 10px; text-align: center; border-radius: 5px;">
+        <h2>Recent Meetings</h2>
+        <div class="table-responsive">
+          <table class="table table-hover">
+              <tr>
+                <th>Title</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+              </tr>
+              {% if recentMeetings %}
+                {% for item in recentMeetings %}
+                  <tr data-toggle="modal" data-target="#meetingModal" onclick="onClickMeeting('{{ item['title']|e }}')">
+                    <td>{{ item['title']|e }}</td>
+                    <td>{{ item['startDate']|e }}</td>
+                    <td>{{ item['endDate']|e }}</td>
+                  </tr>
+                {% endfor %}
+              {% endif %}
+            </table>
+        </div>
+      </div>
+
+      <div class="bg-success piece center-block hover" style="padding: 10px; text-align: center;" id="new-meeting-div" data-toggle="modal" data-target="#newMeetingModal" onclick="initializeNewMeetingModal()">
+        <h1>New Meeting <span class="glyphicon glyphicon-plus-sign" arial-hidden="true"></span></h1>
+      </div>
+
+    </div>
+    
+    <!-- Right Part -->
+
+    <div class="col-xs-8" id="right-layout">
+      <ul class="nav nav-tabs" style="margin-bottom: 10px;" id="tabs">
+        <li role="presentation" class="active"><a href="#all-meeting-tab">Take-part-in</a></li>
+        <li role="presentation"><a href="#sponsor-meeting-tab">Sponsored</a></li>
+        <li role="presentation"><a href="#invited-meeting-tab">Invited</a></li>
+        <li role="presentation"><a href="#past-meeting-tab">Past</a></li>
+      </ul>
+      <div class="piece table-responsive show" style="padding-left: 5px;padding-right: 5px;" id="all-meeting-tab">
+        <table class="table table-striped table-hover">
+          <tr>
+            <th>Title</th>
+            <th>StartDate</th>
+            <th>EndDate</th>
+          </tr>
+          {% if allMeetings %}
+            {% for item in allMeetings %}
+              <tr data-toggle="modal" data-target="#meetingModal" onclick="onClickMeeting('{{ item['title'] }}')">
+                <td>{{ item['title']|e }}</td>
+                <td>{{ item['startDate']|e }}</td>
+                <td>{{ item['endDate']|e }}</td>
+              </tr>
+            {% endfor %}
+          {% endif %}
+        </table>
+      </div>
+
+      <div class="piece table-responsive hidden" style="padding-left: 5px;padding-right: 5px;" id="sponsor-meeting-tab">
+        <table class="table table-striped table-hover">
+          <tr>
+            <th>Title</th>
+            <th>StartDate</th>
+            <th>EndDate</th>
+          </tr>
+          {% if sponsorMeetings %}
+            {% for item in sponsorMeetings %}
+              <tr data-toggle="modal" data-target="#meetingModal" onclick="onClickMeeting('{{ item['title'] }}')">
+                <td>{{ item['title']|e }}</td>
+                <td>{{ item['startDate']|e }}</td>
+                <td>{{ item['endDate']|e }}</td>
+              </tr>
+            {% endfor %}
+          {% endif %}
+        </table>
+      </div>
+
+      <div class="piece table-responsive hidden" style="padding-left: 5px;padding-right: 5px;" id="invited-meeting-tab">
+        <table class="table table-striped table-hover">
+          <tr>
+            <th>Title</th>
+            <th>StartDate</th>
+            <th>EndDate</th>
+          </tr>
+          {% if invitedMeetings %}
+            {% for item in invitedMeetings %}
+              <tr data-toggle="modal" data-target="#meetingModal" onclick="onClickMeeting('{{ item['title'] }}')">
+                <td>{{ item['title']|e }}</td>
+                <td>{{ item['startDate']|e }}</td>
+                <td>{{ item['endDate']|e }}</td>
+              </tr>
+            {% endfor %}
+          {% endif %}
+        </table>
+      </div>
+
+      <div class="piece table-responsive hidden" style="padding-left: 5px;padding-right: 5px;" id="past-meeting-tab">
+          <table class="table table-striped table-hover">
+            <tr>
+              <th>Title</th>
+              <th>StartDate</th>
+              <th>EndDate</th>
+            </tr>
+            {% if pastMeetings %}
+              {% for item in pastMeetings %}
+                <tr data-toggle="modal" data-target="#meetingModal" onclick="onClickMeeting('{{ item['title'] }}')">
+                  <td>{{ item['title']|e }}</td>
+                  <td>{{ item['startDate']|e }}</td>
+                  <td>{{ item['endDate']|e }}</td>
+                </tr>
+              {% endfor %}
+            {% endif %}
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <script type="text/javascript">
+      // Click event on meetings
+      function onClickMeeting(title) {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function (argument) {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            $('#deleteTitle').attr('value', title);
+            $('#sponsor_list').empty();
+            $('#participator_list').empty();
+            var obj = $.parseJSON(xmlhttp.responseText);
+            $('#sponsor_list').append('<tr><td class="hover">' + obj["sponsor"] + '</td></tr>');
+            for (par in obj["participators"]) {
+              $('#participator_list').append('<tr><td class="hover">' + obj["participators"][par] + '</td></tr>');
+            }
+            if (obj["sponsor"] == $('dtcdata#data_username').attr('data')) {
+              $('#meetingModal #deleteMeetingForm').removeClass("hidden");
+            } else {
+              $('#meetingModal #deleteMeetingForm').addClass("hidden");
+            }
+          }
+        };
+
+        xmlhttp.open("POST", "/query_meeting_member", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("title=" + String(title));
+      }
+
+      // Click event on tabs
+      $('#tabs a').click(function(e) {
+        e.preventDefault();
+        var ref = $(this).attr('href');
+        // operation on tab buttons
+        $('#right-layout .active').removeClass("active");
+        $(this).parent().addClass("active");
+        // operation on tabs
+        $('#right-layout .show').addClass('hidden');
+        $('#right-layout .show').removeClass('show');
+        $(ref).removeClass('hidden');
+        $(ref).addClass('show');
+      });
+
+      count = 1;
+      // Initialize newMeetingModal
+      function initializeNewMeetingModal() {
+        var par_list = $('#newMeetingModal #participators_list');
+        par_list.empty();
+        var add_par = $('<select class="form-control single" name="participators"></select>');
+        par_list.append(add_par);
+        count = 1;
+        add_par.attr('id', "new_meeting_select_id_" + String(count))
+        query_user(count);
+      }
+
+      // Click event on select participator
+      function query_user(id) {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function(argument) {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var obj = $.parseJSON(xmlhttp.responseText);
+            for (i in obj) {
+              var toappend = $('#new_meeting_select_id_' + String(id));
+              toappend.append($('<option>' + String(obj[i].username) + '</option>'));
+            }
+          }
+        };
+        xmlhttp.open("POST", "/query_all_users", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send();
+      }
+
+      // Click add participator
+      $('#addParticipator').click(function(e) {
+        var par_list = $('#newMeetingModal #participators_list');
+        var first_ele = $('#newMeetingModal #participators_list select:first-child');
+        var last_ele = $('#newMeetingModal #participators_list select:last-child');
+        var add_par = $('<select class="form-control" name="participators"></select>')
+        last_ele.removeClass("tail");
+        last_ele.addClass("mid");
+        par_list.append(add_par);
+        add_par.addClass('tail');
+        if (count == 1) {
+          first_ele.removeClass('mid');
+          first_ele.removeClass('single');
+          first_ele.addClass('head');
+        }
+        count++;
+        add_par.attr("id", 'new_meeting_select_id_' + String(count));
+        query_user(count);
+      });
+
+    </script>
+{% endblock %}

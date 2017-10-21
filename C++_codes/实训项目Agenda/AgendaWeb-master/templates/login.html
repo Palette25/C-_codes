@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block head %}
+
+  <title>Log In - Agenda</title>
+  <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Register</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-signin" method="POST" action="/doregister" onsubmit="return validate()">
+              <!-- Modal -->
+
+              <h2 class="form-signin-heading">Register</h2>
+
+              <label for="inputUsername" class="sr-only">Username</label>
+              <input type="text" id="regInputUsername" class="form-control head" placeholder="Username" required="" autofocus="" name="username">
+
+              <label for="inputPassword" class="sr-only">Password</label>
+              <input type="password" id="regInputPassword" class="form-control mid" placeholder="Password" required="" name="password" value="">
+
+              <label for="inputPassword" class="sr-only">Password</label>
+              <input type="password" id="regInputAuthPassword" class="form-control tail" placeholder="Password Again" required="" name="auth_password" value="">
+
+              <label for="inputEmail" class="sr-only">Email</label>
+              <input type="text" id="regInputEmail" class="form-control head" placeholder="Email" required="" autofocus="" name="email">
+
+              <label for="inputPhone" class="sr-only">Phone</label>
+              <input type="text" id="regInputPhone" class="form-control tail" placeholder="Phone" required="" autofocus="" name="phone">
+
+              <button class="btn btn-lg btn-primary btn-block" type="submit">OK</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block container %}
+      <script type="text/javascript">
+        function initRegisterModal(argument) {
+          $('#regInputAuthPassword').removeClass("has-error");
+          $('#regInputPassword').removeClass("has-error");
+        }
+
+        function validate() {
+          var password = $('#regInputPassword').val();
+          var auth_password = $('#regInputAuthPassword').val();
+          if (password == auth_password) {
+            $('#regInputAuthPassword').removeClass("has-error");
+            $('#regInputPassword').removeClass("has-error");
+            return true;
+          }
+          $('#regInputAuthPassword').addClass("has-error");
+          $('#regInputPassword').addClass("has-error");
+          return false;
+        }
+
+        $('#registerModal .form-signin input').focusout(validate);
+      </script>
+      <form class="form-signin" method="POST" action="/dologin">
+        <!-- Modal -->
+
+        <h2 class="form-signin-heading">Please log in</h2>
+        <label for="inputUsername" class="sr-only">Email address</label>
+        <input type="text" id="inputUser" class="form-control head" placeholder="Username" required="" autofocus="" name="username">
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control tail" placeholder="Password" required="" name="password">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
+        <button type="button" class='btn btn-lg btn-info btn-block' data-toggle="modal" data-target="#registerModal" onclick="initRegisterModal()">Register</button>
+      </form>
+
+      
+{% endblock %}

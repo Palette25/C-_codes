@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {% include "header.html" %}
+  {% block head %}
+    <title>Layout - Agenda</title>
+  {% endblock %}
+</head>
+<body>
+  <div class="container">
+  {% include "naive.html" %}
+  {% block container %}
+  {% endblock %}
+  </div>
+</body>
+</html>

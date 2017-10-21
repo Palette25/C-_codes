@@ -1,0 +1,24 @@
+<!-- Static navbar -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<!-- <link rel="icon" href="http://v3.bootcss.com/favicon.ico"> -->
+
+<!-- Bootstrap core CSS -->
+<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="{{ url_for('static', filename='css/signin.css') }}" rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-dialog.min.css') }}">
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.0.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-dialog.min.js') }}"></script>
+
+<dtcdata id="data_username" data="{% if 'username' in session %}{{ session['username'] }}{% endif %}">

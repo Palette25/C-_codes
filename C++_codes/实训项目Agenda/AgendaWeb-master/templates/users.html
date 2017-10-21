@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block head %}
+  <title>Users - Agenda</title>
+{% endblock %}
+
+{% block container %}
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Phone</th>
+      </tr>
+      {% if allUsers %}
+        {% for item in allUsers %}
+          <tr>
+            <td>{{ item['username']|e }}</td>
+            <td>{{ item['email']|e }}</td>
+            <td>{{ item['phone']|e }}</td>
+          </tr>
+        {% endfor %}
+      {% endif %}
+    </table>
+  </div>
+{% endblock %}

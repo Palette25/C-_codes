@@ -1,0 +1,13 @@
+{colletion:"User",total:3}
+
+{name:"yang",password:"gerenyinsi13826",email:"411579205@qq.com",phone:"13826230665"}
+
+{name:"ano",password:"ano",email:"1234@qq.com",phone:"12345678"}
+
+{name:"2",password:"2",email:"2",phone:"2"}
+
+{colletion:"Meeting",total:2}
+
+{sponsor:"yang",partipator:"ano",sdate:"2016-07-08/09:00",edate:"2016-07-11/20:34",title:"title"}
+
+{sponsor:"ano",partipator:"yang",sdate:"2017-07-08/12:00",edate:"2017-07-08/12:00",title:"my2title"}

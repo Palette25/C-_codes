@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block head %}
+  <title>Profile - Agenda</title>
+{% endblock %}
+
+{% block container %}
+  <div class="piece" style="text-align: center; align: center; padding: 10px;">
+    <div class="" style="width: 50%; margin: 0 auto;">
+      <form class="signin form-horizontal" action="/doupdateuser" method="POST" onsubmit="return validate()">
+        <div class="form-group">
+          <label class="col-sm-4 control-label" style="text-align: left;">Username</label><h4>{% if session['username'] %} {{ session['username']|capitalize|e }} {% else %} U has NOT logged in !!! {% endif %}</h4>
+        </div>
+        <div class="form-group">
+          <label for="inputOldPassword" class="col-sm-4 control-label" style="text-align: left;">Old Password(*)</label>
+          <div class="col-sm-8">
+            <input type="password" class="form-control" id="inputOldPassword" placeholder="Old Password" name="oldPassword">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputNewPassword" class="col-sm-4 control-label" style="text-align: left;">New Password</label>
+          <div class="col-sm-8">
+            <input type="password" class="form-control" id="inputNewPassword" placeholder="New Password" name="newPassword">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputNewAuthPassword" class="col-sm-4 control-label" style="text-align: left;">New Password Again</label>
+          <div class="col-sm-8">
+            <input type="password" class="form-control" id="inputNewAuthPassword" placeholder="New Password Again" name="newAuthPassword">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail" class="col-sm-4 control-label" style="text-align: left;">Email</label>
+          <div class="col-sm-8">
+            <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email" value="{% if email %}{{ email|e }}{% endif %}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPhone" class="col-sm-4 control-label" style="text-align: left;">Phone</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="inputPhone" placeholder="Phone" name="phone" value="{% if phone %}{{ phone|e }}{% endif %}">
+          </div>
+        </div>
+        <button class="btn btn-success" type="submit">保存<span class="glyphicon glyphicon-ok"></span></button>
+        <!-- <button class="btn btn-danger">重置<span class="glyphicon glyphicon-remove"></span></button> -->
+      </form>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    function validate() {
+      if ($('#inputNewPassword').val() == $('#inputNewAuthPassword').val()) {
+        $('#inputNewPassword').removeClass("has-error");
+        $('#inputNewAuthPassword').removeClass("has-error");
+        return true;
+      } else {        
+        $('#inputNewPassword').addClass("has-error");
+        $('#inputNewAuthPassword').addClass("has-error");
+        return false;
+      }
+    }
+
+    $('div.form-group input').focus(validate);
+  </script>
+{% endblock %}
